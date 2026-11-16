@@ -1,0 +1,178 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated user account profile and workspace preferences",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "format": "email", "maxLength": 254 },
+        "displayName": { "type": "string", "maxLength": 120 },
+        "preferredCurrency": { "type": "string", "enum": ["USD"] },
+        "onboardingCompleted": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "email", "displayName", "preferredCurrency", "onboardingCompleted", "createdAt", "updatedAt"]
+    },
+    "Store": {
+      "title": "Store",
+      "description": "Merchant store profile for unit economics modeling",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "currency": { "type": "string", "enum": ["USD"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "ownerId", "name", "currency", "createdAt", "updatedAt"]
+    },
+    "CostProfile": {
+      "title": "CostProfile",
+      "description": "Baseline financial cost inputs and version for a store",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "storeId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "version": { "type": "integer" },
+        "inputs": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "ownerId", "storeId", "version", "inputs", "createdAt", "updatedAt"]
+    },
+    "Scenario": {
+      "title": "Scenario",
+      "description": "Saved baseline or promotion what-if scenario with explicit input and assumption snapshots",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "storeId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "isSample": { "type": "boolean" },
+        "offerType": { "type": "string", "enum": ["baseline", "percent_discount", "fixed_discount", "free_shipping", "bundle"] },
+        "offerValue": { "type": "number" },
+        "inputSnapshot": { "type": "object" },
+        "assumptionsNote": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "ownerId", "storeId", "title", "isSample", "offerType", "offerValue", "inputSnapshot", "assumptionsNote", "createdAt", "updatedAt"]
+    },
+    "Report": {
+      "title": "Report",
+      "description": "Saved comparison and Decision Brief report snapshot",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "storeId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "baselineScenarioId": { "type": "string", "maxLength": 128 },
+        "comparedScenarioIds": { "type": "array" },
+        "reportSnapshot": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "ownerId", "storeId", "title", "baselineScenarioId", "comparedScenarioIds", "reportSnapshot", "createdAt"]
+    },
+    "PurchaseEntitlement": {
+      "title": "PurchaseEntitlement",
+      "description": "Server-authoritative one-time Pro entitlement synced from verified checkout webhooks",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "provider": { "type": "string", "maxLength": 40 },
+        "providerOrderId": { "type": "string", "maxLength": 128 },
+        "productId": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "enum": ["active", "refunded", "revoked"] },
+        "activatedAt": { "type": "string", "format": "date-time" },
+        "revokedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "provider", "providerOrderId", "productId", "status", "activatedAt"]
+    },
+    "AdminSettings": {
+      "title": "AdminSettings",
+      "description": "Public-safe configurable brand, pricing, and checkout connection status (never secrets)",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "brandName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "regularPriceUsd": { "type": "number" },
+        "activePromoPriceUsd": { "type": "number" },
+        "activePromoLabel": { "type": "string", "maxLength": 80 },
+        "supportEmail": { "type": "string", "maxLength": 254 },
+        "checkoutProvider": { "type": "string", "maxLength": 40 },
+        "checkoutConnected": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "brandName", "regularPriceUsd", "supportEmail", "checkoutProvider", "checkoutConnected", "updatedAt"]
+    },
+    "DeletionRequest": {
+      "title": "DeletionRequest",
+      "description": "User-submitted account and data deletion request record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "maxLength": 254 },
+        "reason": { "type": "string", "maxLength": 500 },
+        "status": { "type": "string", "enum": ["requested", "processed"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "email", "reason", "status", "createdAt"]
+    },
+    "AdminMember": {
+      "title": "AdminMember",
+      "description": "Trusted administrator lookup document",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 254 }
+      },
+      "required": ["uid", "email"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user account profiles and preferences"
+    },
+    "/stores/{storeId}": {
+      "schema": { "$ref": "#/entities/Store" },
+      "description": "Merchant stores owned by authenticated users"
+    },
+    "/cost_profiles/{profileId}": {
+      "schema": { "$ref": "#/entities/CostProfile" },
+      "description": "Baseline unit economics defaults per store"
+    },
+    "/scenarios/{scenarioId}": {
+      "schema": { "$ref": "#/entities/Scenario" },
+      "description": "Saved promotion scenarios and baselines"
+    },
+    "/reports/{reportId}": {
+      "schema": { "$ref": "#/entities/Report" },
+      "description": "Saved comparison report snapshots"
+    },
+    "/purchase_entitlements/{entitlementId}": {
+      "schema": { "$ref": "#/entities/PurchaseEntitlement" },
+      "description": "Server-authoritative one-time Pro entitlements"
+    },
+    "/admin_settings/{settingId}": {
+      "schema": { "$ref": "#/entities/AdminSettings" },
+      "description": "Public-safe global brand and pricing configuration"
+    },
+    "/deletion_requests/{requestId}": {
+      "schema": { "$ref": "#/entities/DeletionRequest" },
+      "description": "Account and data deletion requests"
+    },
+    "/admins/{userId}": {
+      "schema": { "$ref": "#/entities/AdminMember" },
+      "description": "Admin role marker documents"
+    }
+  }
+}

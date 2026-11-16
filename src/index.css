@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-navy-950: #0B1220;
+  --color-navy-900: #111C2E;
+  --color-navy-800: #18253B;
+  --color-slate-border: #263449;
+  --color-ink-primary: #F8FAFC;
+  --color-ink-muted: #9CAFC6;
+  --color-emerald-accent: #5EE4A4;
+  --color-positive: #34D399;
+  --color-warning: #FBBF24;
+  --color-negative: #FB7185;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    background-color: #0B1220;
+    color: #F8FAFC;
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+
+  body {
+    letter-spacing: 0.005em;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    opacity: 0.6;
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Clean print-to-PDF layout for Financial Reports & Decision Briefs */
+@media print {
+  @page {
+    size: letter portrait;
+    margin: 0.55in;
+  }
+
+  html, body {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    font-size: 11pt;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-surface {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    border-color: #CBD5E1 !important;
+    box-shadow: none !important;
+  }
+
+  .print-muted {
+    color: #475569 !important;
+  }
+
+  .print-break-avoid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
